@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>PABTME.ai — Build. Create. Connect.</title>
+  <meta name="description" content="PABTME.ai — a community built around AI, coding, technology, creativity, and digital projects." />
+  <meta name="theme-color" content="#07050f" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%238b5cf6'/%3E%3Cstop offset='1' stop-color='%2322d3ee'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='18' fill='url(%23g)'/%3E%3Cpath d='M20 46V18h14a10 10 0 010 20H26' fill='none' stroke='white' stroke-width='6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <canvas id="bg" aria-hidden="true"></canvas>
+  <div class="aurora" aria-hidden="true"><i></i><i></i><i></i></div>
+
+  <!-- ============ AUTH ============ -->
+  <main id="authView" class="auth hidden">
+    <section class="auth-card">
+      <div class="brand">
+        <div class="orb" aria-hidden="true"><span>P</span></div>
+        <h1 class="wordmark">PABTME<span>.ai</span></h1>
+        <p class="tagline">Build. Create. Connect.</p>
+      </div>
+
+      <div class="tabs" role="tablist">
+        <button id="tabLogin" class="tab active" role="tab" aria-selected="true">Log in</button>
+        <button id="tabRegister" class="tab" role="tab" aria-selected="false">Create account</button>
+        <span class="tab-glider" aria-hidden="true"></span>
+      </div>
+
+      <div id="googleWrap" class="google-wrap hidden">
+        <div id="googleBtn"></div>
+        <div class="or"><span>or use your email</span></div>
+      </div>
+
+      <form id="loginForm" class="form" autocomplete="on" novalidate>
+        <label class="field">
+          <span>Username or email</span>
+          <input id="loginId" name="username" type="text" autocomplete="username" maxlength="254" required />
+        </label>
+        <label class="field">
+          <span>Password</span>
+          <div class="pw">
+            <input id="loginPw" name="password" type="password" autocomplete="current-password" maxlength="200" required />
+            <button type="button" class="eye" data-eye="loginPw" aria-label="Show password">👁</button>
+          </div>
+        </label>
+        <p class="err" id="loginErr" role="alert"></p>
+        <button class="btn primary" type="submit">Log in</button>
+      </form>
+
+      <form id="registerForm" class="form hidden" autocomplete="on" novalidate>
+        <label class="field">
+          <span>Username <em>(6–20 letters, numbers, _)</em></span>
+          <input id="regUser" name="username" type="text" autocomplete="username" minlength="6" maxlength="20" required />
+          <small class="hint" id="userHint"></small>
+        </label>
+        <label class="field">
+          <span>Email</span>
+          <input id="regEmail" name="email" type="email" autocomplete="email" maxlength="254" required />
+        </label>
+        <label class="field">
+          <span>Password</span>
+          <div class="pw">
+            <input id="regPw" name="password" type="password" autocomplete="new-password" maxlength="72" required />
+            <button type="button" class="eye" data-eye="regPw" aria-label="Show password">👁</button>
+          </div>
+          <div class="meter" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+          <small class="hint" id="pwHint">8+ characters with upper, lower case and a number.</small>
+        </label>
+        <p class="err" id="regErr" role="alert"></p>
+        <button class="btn primary" type="submit">Create account</button>
+      </form>
+
+      <button class="link-btn" data-open-about>About PABTME.ai</button>
+    </section>
+  </main>
+
+  <!-- ============ APP ============ -->
+  <div id="appView" class="app hidden">
+    <aside id="sidebar" class="sidebar">
+      <div class="side-top">
+        <div class="logo-row">
+          <div class="orb small" aria-hidden="true"><span>P</span></div>
+          <strong class="wordmark sm">PABTME<span>.ai</span></strong>
+        </div>
+        <button id="newChat" class="btn glow">＋ New chat</button>
+      </div>
+      <nav id="chatList" class="chat-list" aria-label="Your chats"></nav>
+      <div class="side-bottom">
+        <button class="side-btn" data-open-about>✨ About PABTME.ai</button>
+        <a class="side-btn" href="https://t.me/pabtme" target="_blank" rel="noopener noreferrer">📢 Telegram</a>
+        <div class="user-box">
+          <div class="avatar" id="avatar">?</div>
+          <div class="who">
+            <b id="userName">user</b>
+            <small id="userMail"></small>
+          </div>
+          <button id="editName" class="icon-btn" title="Change username" aria-label="Change username">✎</button>
+          <button id="logout" class="icon-btn" title="Log out" aria-label="Log out">⏻</button>
+        </div>
+      </div>
+    </aside>
+    <div id="scrim" class="scrim"></div>
+
+    <section class="main">
+      <header class="topbar">
+        <button id="menuBtn" class="icon-btn only-mobile" aria-label="Open menu">☰</button>
+        <h2 id="chatTitle">New chat</h2>
+        <div class="top-actions">
+          <button id="exportBtn" class="icon-btn" title="Download this chat" aria-label="Download this chat">⬇</button>
+          <button id="clearBtn" class="icon-btn" title="Delete this chat" aria-label="Delete this chat">🗑</button>
+        </div>
+      </header>
+
+      <div id="scroller" class="scroller">
+        <div id="welcome" class="welcome">
+          <div class="orb big" aria-hidden="true"><span>P</span></div>
+          <h2 id="hello">Hey there</h2>
+          <p>Ask me anything. Drop in a photo, a PDF or a code file and I'll dig in.</p>
+          <div class="chips" id="chips">
+            <button data-p="Explain this like I'm new to it: ">💡 Explain something</button>
+            <button data-p="Write clean, commented code for: ">⚡ Write code</button>
+            <button data-p="Find the bug and fix it:&#10;&#10;">🐞 Fix a bug</button>
+            <button data-p="Give me 10 creative project ideas about: ">🚀 Project ideas</button>
+            <button data-p="Summarize this in 5 bullet points:&#10;&#10;">📝 Summarize</button>
+            <button data-p="Translate this to English (and tell me the original language):&#10;&#10;">🌍 Translate</button>
+            <button data-p="Write a catchy post for TikTok / Telegram about: ">🎵 Write a post</button>
+            <button data-p="Teach me step by step, then quiz me on: ">🎓 Teach me</button>
+          </div>
+        </div>
+        <div id="messages" class="messages" aria-live="polite"></div>
+      </div>
+
+      <footer class="composer-wrap">
+        <div id="fileTray" class="file-tray"></div>
+        <div id="composer" class="composer">
+          <button id="attachBtn" class="icon-btn" title="Attach photos or files" aria-label="Attach files">📎</button>
+          <input id="fileInput" type="file" multiple hidden accept="image/*,.pdf,.txt,.md,.csv,.json,.xml,.yaml,.yml,.log,.js,.ts,.jsx,.tsx,.py,.java,.c,.h,.cpp,.cs,.go,.rs,.php,.rb,.swift,.kt,.sql,.sh,.html,.css,.vue,.dart,.lua" />
+          <textarea id="input" rows="1" placeholder="Message PABTME.ai…" maxlength="20000"></textarea>
+          <button id="micBtn" class="icon-btn hidden" title="Speak" aria-label="Voice input">🎤</button>
+          <button id="sendBtn" class="send" aria-label="Send">➤</button>
+        </div>
+        <p class="fine">PABTME.ai can make mistakes. Double-check anything important.</p>
+      </footer>
+    </section>
+  </div>
+
+  <!-- ============ ABOUT ============ -->
+  <div id="aboutModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="aboutTitle">
+    <div class="modal-card about">
+      <button class="close" data-close aria-label="Close">✕</button>
+      <h2 id="aboutTitle">About PABTME.ai</h2>
+      <p>Welcome to PABTME.ai — a community built around AI, coding, technology, creativity, and digital projects.</p>
+      <p>We’re here to build useful things, share ideas, create projects, and grow together. PABTME.ai is more than just a website — it’s a place to learn, create, experiment, and explore.</p>
+
+      <h3>👑 Owners</h3>
+      <ul class="plain"><li>@imkdenz</li><li>@emilyilysm</li></ul>
+
+      <h3>📢 Telegram</h3>
+      <p>Join our community:<br /><a href="https://t.me/pabtme" target="_blank" rel="noopener noreferrer">t.me/pabtme</a></p>
+
+      <h3>🎵 TikTok</h3>
+      <p><a href="https://www.tiktok.com/@mthuzxd" target="_blank" rel="noopener noreferrer">@mthuzxd</a></p>
+
+      <p class="sign">PABTME.ai — Build. Create. Connect.</p>
+    </div>
+  </div>
+
+  <!-- ============ USERNAME ============ -->
+  <div id="nameModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="nameTitle">
+    <form id="nameForm" class="modal-card" novalidate>
+      <button type="button" class="close" data-close aria-label="Close">✕</button>
+      <h2 id="nameTitle">Choose your username</h2>
+      <p class="muted">6–20 characters. Letters, numbers and underscore.</p>
+      <label class="field">
+        <input id="nameInput" type="text" minlength="6" maxlength="20" autocomplete="username" required />
+      </label>
+      <p class="err" id="nameErr" role="alert"></p>
+      <button class="btn primary" type="submit">Save username</button>
+    </form>
+  </div>
+
+  <div id="toasts" class="toasts" aria-live="polite"></div>
+  <script src="app.js"></script>
+</body>
+</html>
